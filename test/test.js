@@ -102,6 +102,16 @@ describe('Just', () => {
     });
   });
 
+  describe('#or', () => {
+    it('should return itself', () => {
+      const a = Maybe.of(1);
+      const b = Maybe.of(2);
+
+      const result = a.or(b);
+      expect(result).to.equal(a);
+    });
+  });
+
   describe('#value', () => {
     it('should return the contained value', () => {
       const a = Maybe.of(1);
@@ -170,6 +180,24 @@ describe('Nothing', () => {
     it('should return itself', () => {
       const result = Maybe.Nothing.join(Maybe.of(1), (av, bv) => av + bv);
       expect(result).to.equal(Maybe.Nothing);
+    });
+  });
+
+  describe('#or', () => {
+    it('should return the other value', () => {
+      const a = Maybe.Nothing;
+      const b = Maybe.of(1);
+
+      const result = a.or(b);
+      expect(result).to.equal(b);
+    });
+
+    it('should wrap non-maybe other values in maybe', () => {
+      const a = Maybe.Nothing;
+
+      const result = a.or(1);
+      expect(result).to.be.instanceOf(Maybe.Maybe);
+      expect(result.value()).to.equal(1);
     });
   });
 
